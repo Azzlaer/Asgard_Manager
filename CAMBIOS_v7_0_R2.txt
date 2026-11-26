@@ -1,0 +1,21 @@
+ASGARD Server Suite v7.0 Void Foundation R2 AutoDetect
+
+CORRECCIONES
+- AsgardCorePlugin.Bridge ahora es accesible desde AsgardPunisherServer.
+- AsgardCorePlugin.Log ahora es accesible desde AsgardPunisherServer.
+- ServerId y EnforcementMode ahora son accesibles desde AsgardMasterUI.
+- Se evita la cadena de errores CS0117 entre DLL separadas.
+
+AUTODETECCION
+- CONFIGURAR_RUTAS.bat solo pide la carpeta que contiene valheim_server.exe.
+- Detecta automaticamente valheim_server_Data\Managed.
+- Detecta automaticamente BepInEx\core.
+- Busca Jotunn.dll dentro de BepInEx\plugins y subcarpetas.
+- Si se selecciona una carpeta superior, busca valheim_server.exe recursivamente.
+- Si encuentra varios servidores, permite elegir uno por numero.
+- Las rutas se escriben como XML seguro aunque contengan espacios o caracteres especiales.
+
+COMPILACION
+- Nuevo CONFIGURAR_Y_COMPILAR.bat para configurar y compilar en un solo flujo.
+- BUILD_ALL.bat abre automaticamente el configurador si faltan rutas.
+- Si Jotunn no esta instalado, compila ServerBase y AdminClient y omite solo Enhanced.

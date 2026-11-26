@@ -1,0 +1,16 @@
+ASGARD HOST MANAGER v5.3 PROFESSIONAL
+
+- Botón Eliminar seleccionado en baneados, whitelist y admins.
+- Eliminación múltiple y ruta DELETE del servicio corregida.
+- Botón Eliminar seleccionado en Config Manager con backup automático.
+- Logs divididos con dashboard de CPU/RAM del servidor seleccionado.
+- Supervisor persistente con gracia, intentos máximos y enfriamiento.
+- Reinicio diario corregido y protegido contra ejecuciones duplicadas.
+- Guardado/cierre seguro, backup y fallback forzado del proceso seleccionado.
+- Emparejamiento Steam ID/nombre corregido.
+- Reconstrucción del registro persistente leyendo el log completo.
+- Modificadores preestablecidos, EventRate y comandos setkey/removekey.
+- Configuración automática para Tristan ValheimRcon y AviiNL rcon.
+- Puerto RCON derivado automáticamente desde el parámetro -port.
+- Respaldo del CFG de RCON antes de modificarlo.
+- Validación completa de sintaxis y prueba de API/GUI.

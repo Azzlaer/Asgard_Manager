@@ -1,0 +1,58 @@
+ASGARD HOST MANAGER v6.2 CORE AFFINITY
+======================================
+
+PARA CREAR LOS .EXE
+1. Extrae este ZIP en una carpeta nueva.
+2. Ejecuta CREAR_EXE_PORTABLE.bat.
+3. Espera a que termine la compilación.
+4. Abre dist\AsgardHostManager_v7_0_Void_Foundation.
+5. Ejecuta ASGARD_Host_Manager.exe.
+
+La carpeta final no necesita Python. No se debe separar:
+- ASGARD_Host_Manager.exe
+- ASGARD_Service.exe
+- ASGARD_Service_Control.exe
+- RemoteAgentPackage
+- RemoteSetup
+- Library
+- Data
+
+MIGRACIÓN
+Al primer inicio se copia la base y biblioteca existente desde
+%LOCALAPPDATA%\AsgardHostManager sin borrar el original.
+
+HOST REMOTO
+1. Copia la carpeta RemoteSetup al host remoto.
+2. Ejecuta RemoteSetup\EJECUTAR_COMO_ADMIN.bat como administrador.
+3. El preparador intentará instalar Tailscale con winget cuando esté disponible.
+4. Autoriza/conecta Tailscale en ambos equipos cuando lo solicite.
+5. En el panel abre Remoto > Centro de control remoto.
+6. Agrega el host y pulsa Probar SSH.
+7. Pulsa Autoconfigurar.
+8. Busca y registra los servidores Valheim.
+
+CARPETAS PORTABLES
+Library\Mods       Biblioteca global de mods.
+Library\Configs    Biblioteca global de configuraciones.
+Data               Base, claves, credenciales cifradas y logs.
+RemoteDownloads    Backups y archivos descargados por SFTP.
+
+SEGURIDAD
+- Usa Tailscale o una VPN; no expongas los puertos directamente a Internet.
+- Prefiere la clave SSH que crea Autoconfigurar.
+- El agente requiere token; el firewall permite LAN privada y restringe Tailscale a sus rangos privados.
+- Detén Valheim antes de reemplazar mods/configuraciones.
+
+
+CONTROL DE RECURSOS
+-------------------
+Servidor local: selecciona el servidor y pulsa Recursos.
+Servidor remoto: Remoto > Centro de control remoto > CPU y memoria.
+
+La ventana CPU usa dos listas:
+- Núcleos físicos disponibles: cada fila muestra sus CPU lógicas/hilos.
+- Núcleos físicos permitidos: el servidor solo puede usar esas CPU lógicas.
+Usa Agregar y Eliminar para mover núcleos completos. Una lista permitida vacía
+significa que Windows puede usar todos los procesadores.
+Usa Autoconfigurar perfil para una distribucion segura inicial.
+Deja RAM dura en 0 salvo que aceptes el riesgo de cierre por falta de memoria.

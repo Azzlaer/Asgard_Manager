@@ -1,0 +1,7 @@
+ASGARD v7.0.10.1 — Logo Resource Fix
+
+- Convierte la imagen proporcionada a PNG real.
+- Incrusta el logo dentro de ASGARD_Host_Manager.exe mediante PyInstaller.
+- Busca primero el recurso interno de _MEIPASS y luego Assets externo.
+- Elimina el rostro procedural viejo como fallback.
+- Valida la firma PNG antes de compilar.

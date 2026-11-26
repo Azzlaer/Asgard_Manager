@@ -1,0 +1,50 @@
+ASGARD HOST MANAGER v6.0 REMOTE EDITION
+======================================
+
+NUEVO CENTRO REMOTO
+- Registro de múltiples computadoras/hosts.
+- Conexión inicial mediante SSH y transferencia SFTP.
+- ASGARD Remote Agent persistente para control de procesos y métricas.
+- Compatibilidad con IP LAN o IP privada de Tailscale.
+- Credenciales cifradas dentro de Data.
+- Token aleatorio obligatorio para cada petición al agente.
+
+AUTOCONFIGURACIÓN
+- Migra automáticamente de contraseña SSH a clave RSA de 3072 bits.
+- Sube ASGARD_Remote_Agent.exe por SFTP.
+- Genera agent_config.json y token individual.
+- Crea la tarea ASGARDRemoteAgent al arranque como SYSTEM.
+- Crea reglas de firewall para LAN privada y limita Tailscale a sus rangos privados.
+- Intenta instalar Tailscale con winget si falta, lo detecta y activa modo unattended.
+- La autorización inicial de la cuenta Tailscale sigue siendo un paso humano cuando no se usa una clave de autenticación.
+- Comprueba el agente al terminar.
+
+SERVIDORES REMOTOS
+- Búsqueda automática de valheim_server.exe.
+- Registro manual o múltiple desde resultados encontrados.
+- Iniciar, detener, reiniciar, terminar y crear backups.
+- Métricas de CPU, RAM, PID, estado y tiempo activo.
+- Visualización de logs remotos.
+- Selección múltiple para acciones y despliegues.
+
+BIBLIOTECA GLOBAL / SFTP
+- Biblioteca local portable en Library.
+- Despliegue de mods y configuraciones a uno o varios servidores remotos.
+- Backup de BepInEx antes de reemplazar archivos.
+- Comparación SHA-256: solo transfiere archivos nuevos o modificados.
+- Explorador SFTP con alcances Servidor, Savedir y Backups.
+- Subida y descarga de archivos o carpetas.
+- Backup remoto con descarga automática a RemoteDownloads.
+- Movimiento temporal/atómico para evitar archivos incompletos.
+- Extracción segura de ZIP: bloquea rutas absolutas y recorridos ../.
+
+EJECUTABLES
+- ASGARD_Host_Manager.exe
+- ASGARD_Service.exe
+- ASGARD_Service_Control.exe
+- RemoteAgentPackage\ASGARD_Remote_Agent.exe
+
+LIMITACIÓN DE PRIMERA CONEXIÓN
+Ningún panel puede activar SSH en una computadora a la que todavía no tiene acceso.
+Por eso el único paso manual obligatorio es ejecutar RemoteSetup\EJECUTAR_COMO_ADMIN.bat
+en el host remoto. Después de eso, el panel realiza la instalación del agente.

@@ -1,0 +1,30 @@
+ASGARD HOST MANAGER v6.2 - PREPARAR UNA COMPUTADORA REMOTA
+
+PRIMERA VEZ (único paso manual inevitable):
+1. Copia esta carpeta RemoteSetup al host remoto.
+2. Ejecuta EJECUTAR_COMO_ADMIN.bat como administrador.
+3. El preparador instalará OpenSSH y, si puede, Tailscale mediante winget.
+4. Autoriza Tailscale en este equipo y en la PC del panel cuando lo solicite.
+5. En ASGARD abre Remoto > Centro de control remoto.
+6. Agrega el host usando su IP de Tailscale, usuario de Windows y contraseña o clave SSH.
+7. Pulsa Probar SSH.
+8. Pulsa Autoconfigurar.
+
+AUTOCONFIGURAR realizará por sí solo:
+- Conversión opcional de contraseña a clave SSH.
+- Subida del ASGARD Remote Agent mediante SFTP.
+- Generación de token privado.
+- Creación de tarea de inicio automático como SYSTEM.
+- Reglas de firewall para LAN privada y rangos privados de Tailscale.
+- Arranque y comprobación del agente.
+
+Después podrás buscar instalaciones de valheim_server.exe, registrar servidores, iniciar,
+detener, reiniciar, crear backups, consultar logs y desplegar mods/configs desde tu
+biblioteca portable local.
+
+SEGURIDAD:
+- No abras SSH ni el puerto del agente directamente a Internet.
+- Usa Tailscale o una VPN equivalente.
+- Prefiere autenticación SSH mediante clave.
+- El agente requiere un token aleatorio en cada petición.
+- La contraseña guardada por ASGARD queda cifrada dentro de Data.

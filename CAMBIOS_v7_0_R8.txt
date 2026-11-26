@@ -1,0 +1,8 @@
+ASGARD v7.0.8 — Single Instance Fix
+
+- Bloqueo interproceso del servicio ASGARD.
+- Reserva del puerto antes del autoarranque.
+- Detección de procesos Valheim existentes por ejecutable y firma.
+- Adjunta una instancia existente en vez de duplicarla.
+- Bloquea el arranque si ya existen varios duplicados.
+- Incluye diagnóstico de PID y líneas de comando.

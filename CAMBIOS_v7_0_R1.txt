@@ -1,0 +1,12 @@
+ASGARD Server Suite v7.0 Void Foundation R1
+
+CORRECCION PRINCIPAL
+- VALIDAR_PROYECTO.bat ya no pasa el comodin literal *.py a Python.
+- Nuevo validador Tools\validar_proyecto.py.
+- Valida cada archivo Python por separado y muestra el nombre exacto si falla.
+- Valida los .csproj y Directory.Build.props como XML.
+- Comprueba fuentes C# y archivos esenciales.
+- CREAR_EXE_PORTABLE.bat ejecuta la validacion automaticamente antes de compilar.
+
+El error corregido era:
+[Errno 22] Invalid argument: '*.py'

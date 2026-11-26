@@ -1,0 +1,35 @@
+ASGARD HOST MANAGER v6.1 RESOURCE CONTROL
+============================================================
+
+NUEVO MODULO CPU Y MEMORIA
+- Boton Recursos en el panel local.
+- Boton CPU y memoria en el Centro de control remoto.
+- Seleccion de procesadores logicos por servidor.
+- Prioridades Baja, Por debajo de normal, Normal y Por encima de normal.
+- Limite porcentual de CPU mediante Windows Job Objects.
+- Umbral suave de RAM con advertencias y acciones de proteccion.
+- Limite duro de RAM opcional, desactivado por defecto.
+- Aplicacion automatica en inicio, reinicio, watchdog y recuperacion.
+- Soporte identico dentro de ASGARD Remote Agent.
+
+PERFILES AUTOMATICOS
+- Automatico equilibrado.
+- Bajo impacto.
+- Servidor prioritario.
+- Personalizado.
+- Reserva automatica de CPU y RAM para Windows/ASGARD.
+- Distribucion por servidor segun el hardware y servidores registrados.
+
+PROTECCION
+- Backup y reinicio controlado al superar RAM, si se habilita.
+- Reinicio al quedar vacio solo cuando existe contador de jugadores confiable.
+- Enfriamiento de 15 minutos para impedir bucles de reinicio.
+- Límite duro oculto como opcion avanzada por riesgo de falta de memoria.
+
+COMPATIBILIDAD
+- Migra bases anteriores creando resource_settings automaticamente.
+- Servidores remotos v6.0 reciben politica predeterminada sin perder datos.
+- La biblioteca portable, SSH, SFTP, Tailscale, Discord y RCON permanecen.
+
+MIGRACION
+- Asistente MIGRAR_DATOS_PORTABLES.bat para copiar Data, Library, claves SSH y configuraciones desde v5.4/v6.0.

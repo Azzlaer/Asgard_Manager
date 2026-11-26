@@ -1,0 +1,14 @@
+ASGARD Host Manager v7.0.8 — Crimson Void R8 Panel Sync Fix
+
+CAMBIOS DEL PANEL EXTERNO
+- Paleta completa roja y negra en ttk, Tk clásico, menús, entradas, combos y listas.
+- Corrección de texto invisible en estados readonly, disabled y selected.
+- Logo procedural de rostro del vacío dibujado con Canvas; no usa imágenes.
+- Nueva columna SALUD con diagnóstico vivo del proceso y heartbeat Discord.
+- Estados: SALUDABLE, INICIANDO, TELEMETRÍA ATRASADA, ALERTA DISCORD y DETENIDO.
+- La ventana Jugadores conectados ahora se actualiza automáticamente cada 1.5 segundos.
+- La tabla online se reconcilia sin reiniciar la hora connected_at.
+- Heartbeat interno cada 2 segundos para evitar desincronización de runtime.
+- Soporte para IDs Steam, PlayFab, Xbox, Microsoft, PSN y Crossplay.
+- Nueva variable Discord {player_list} y botón para insertarla en la plantilla.
+- El mod de Valheim no fue modificado en esta revisión; conserva DLL 7.0.6.

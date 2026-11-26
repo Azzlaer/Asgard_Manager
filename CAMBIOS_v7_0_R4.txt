@@ -1,0 +1,10 @@
+ASGARD SERVER SUITE v7.0 VOID FOUNDATION R4 - PARTICLES + PORTABLE FIX
+
+- Agregada referencia a UnityEngine.ParticleSystemModule.dll.
+- El autodetector comprueba el modulo de particulas antes de compilar el Avatar Enhanced.
+- AsgardVoidAvatarClient actualizado a foundation-r4.
+- AsgardMasterUI actualizado a foundation-r4.
+- Reemplazado xcopy por Tools\crear_portable.py para evitar "Memoria insuficiente" en rutas largas.
+- El empaquetador excluye bin, obj, Dist, UserPaths.props y temporales.
+- ServerBase y AdminClient se copian aunque falle solamente el Avatar Enhanced.
+- Nombres de salida y mensajes actualizados a R4.

@@ -1,0 +1,11 @@
+ASGARD v7.0.10 — Crimson Void Performance Fix
+
+- Eliminada la exploración de procesos por servidor y por petición del panel.
+- Una sola instantánea de valheim_server.exe compartida por todos los servidores.
+- Caché de procesos de 4 segundos y reconciliación segura cada 6 segundos.
+- /servers usa estado reconciliado y métricas ya recolectadas, sin trabajo pesado.
+- Tabla principal actualizada en hilo secundario cada 2.5 segundos.
+- Logs, eventos y gráficas actualizados en hilo secundario cada 6 segundos.
+- Backups actualizados cada 20 segundos y solo se redibujan si cambian.
+- El rostro Crimson Void reduce su animación y se pausa cuando no está visible.
+- Se conserva la detección de duplicados, recuperación de PID y limpieza de telemetría de R9.

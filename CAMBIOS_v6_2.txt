@@ -1,0 +1,15 @@
+ASGARD HOST MANAGER v6.2 CORE AFFINITY
+
+CAMBIOS PRINCIPALES
+- Nuevo selector de CPU con dos listas: núcleos físicos disponibles y permitidos.
+- Botones Agregar, Eliminar, Agregar todos, Quitar todos y Actualizar lista.
+- Cada núcleo físico muestra los procesadores lógicos/hilos que contiene.
+- Al permitir un núcleo se agregan juntos todos sus hilos hermanos.
+- Las afinidades antiguas de hilos sueltos se expanden al núcleo físico completo.
+- Detección exacta en Windows mediante GetLogicalProcessorInformationEx.
+- La autoconfiguración reparte núcleos físicos completos entre servidores.
+- Funciona igual para servidores locales y para ASGARD Remote Agent.
+- Se mantienen límite porcentual de CPU, prioridad y controles de RAM.
+
+NOTA
+Una lista de permitidos vacía significa afinidad sin restricción: Windows puede usar todos los procesadores.

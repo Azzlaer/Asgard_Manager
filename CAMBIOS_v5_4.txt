@@ -1,0 +1,14 @@
+ASGARD HOST MANAGER v5.4 PORTABLE
+=================================
+
+- Preparado para compilar el panel como ASGARD_Host_Manager.exe.
+- Servicio separado ASGARD_Service.exe, ejecutado sin consola.
+- Controlador ASGARD_Service_Control.exe para status/start/stop/restart.
+- El panel inicia automáticamente el servicio portable.
+- Library se guarda junto al EXE, no dentro de AppData.
+- Data se guarda junto al EXE para una instalación completamente portable.
+- Migración automática, no destructiva, desde %LOCALAPPDATA%\AsgardHostManager.
+- Botón Abrir carpeta dentro de las ventanas de biblioteca.
+- Menú para abrir Library y Data desde el panel.
+- Scripts BAT compatibles tanto con código Python como con EXE compilado.
+- Roadmap del módulo remoto guardado en ROADMAP_CONTROL_REMOTO.md.

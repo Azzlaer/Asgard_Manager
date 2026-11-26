@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><Import Project="..\UserPaths.props" Condition="Exists('..\UserPaths.props')" /><PropertyGroup><AssemblyName>AsgardVoidAvatarClient</AssemblyName><RootNamespace>Asgard.VoidAvatar</RootNamespace></PropertyGroup><ItemGroup><Reference Include="Jotunn"><HintPath>$(JotunnDll)</HintPath><Private>false</Private></Reference></ItemGroup></Project>

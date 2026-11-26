@@ -1,0 +1,9 @@
+ASGARD Server Suite v7.0.6 — Crimson Void R6
+
+- Eliminada dependencia System.Web.Extensions que impedía cargar AsgardCore en Unity Mono.
+- Serializador JSON interno sin dependencias externas.
+- API segura del Core para GUI aun cuando el bridge está desconectado.
+- GUI F8 rediseñada completamente en rojo/negro temática Crimson Void.
+- Barra lateral, tarjetas de estado, Nexus, Audit, Sentencias, Servidor y Recursos.
+- Protección de interfaz: un error se registra de forma limitada y no inunda el log cada frame.
+- Versiones BepInEx 7.0.6.

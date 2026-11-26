@@ -1,0 +1,12 @@
+ASGARD v7.0.9 — Process Reconciliation Fix
+
+- El panel ya no confía ciegamente en el PID guardado en SQLite.
+- Reconstruye cada servidor desde valheim_server.exe usando ejecutable, puerto, savedir, mundo y nombre.
+- Recupera automáticamente servidores iniciados antes que el servicio o desde un BAT.
+- Impide mostrar DETENIDO con jugadores y Join Code antiguos.
+- Cuando el proceso está apagado, limpia jugadores, Join Code y la tabla online.
+- Detecta y muestra todos los PID duplicados en la misma fila.
+- Detener cierra todas las instancias duplicadas de ese servidor.
+- Reiniciar elimina duplicados antes de lanzar una sola instancia.
+- Verificación final después de Popen para cerrar carreras de arranque.
+- Incluye LIMPIAR_DUPLICADOS_Y_ARRANCAR.bat para una transición limpia.

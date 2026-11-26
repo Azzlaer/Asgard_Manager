@@ -1,0 +1,22 @@
+ACTUALIZAR ASGARD HOST MANAGER 5.3/5.4/v6.0/v6.1 A v6.2 CORE AFFINITY
+============================================================
+
+1. Detén el servicio de la versión anterior.
+2. Extrae v6.2 en una carpeta NUEVA con permisos de escritura.
+3. Ejecuta CREAR_EXE_PORTABLE.bat.
+4. Abre dist\AsgardHostManager_v7_0_Void_Foundation.
+5. Ejecuta ASGARD_Host_Manager.exe.
+
+MIGRACIÓN AUTOMÁTICA
+- La primera ejecución busca %LOCALAPPDATA%\AsgardHostManager.
+- Copia la base de datos y la biblioteca que falte.
+- No elimina ni sobrescribe el respaldo anterior.
+
+NUEVAS RUTAS PORTABLES
+- Data\asgard_host.db
+- Library\Mods
+- Library\Configs
+- RemoteDownloads
+- RemoteAgentPackage
+
+No mezcles los ejecutables nuevos con los de una versión anterior.

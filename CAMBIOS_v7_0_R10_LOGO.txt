@@ -1,0 +1,7 @@
+ASGARD v7.0 Crimson Void R10 — Logo personalizado
+
+- Reemplaza el rostro dibujado por código del encabezado del panel externo.
+- Usa exactamente la imagen proporcionada por el usuario.
+- La imagen queda en Assets/void_avatar_user.png.
+- También se usa como icono de la ventana principal.
+- No modifica las DLL ni la GUI F8 de Valheim.

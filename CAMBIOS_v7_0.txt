@@ -1,0 +1,37 @@
+ASGARD SERVER SUITE v7.0 VOID FOUNDATION
+
+PANEL EXTERNO
+- Nueva identidad visual Void Command: negro profundo, violeta, cian y logo vectorial original.
+- Centro ASGARD Suite por servidor.
+- Token seguro Host Manager <-> plugin Valheim.
+- Modos observe, manual y automatic.
+- Base de datos para eventos Asgard Audit y castigos.
+- Endpoint autenticado para auditoría y solicitudes de baneo.
+
+VALHEIM SUITE
+- AsgardCore: identidad, eventos y puente HTTP local.
+- AsgardAudit: construcción, daño y destrucción de estructuras; detector inicial de ráfagas.
+- AsgardPunisherServer: Anticheat Encarnado, secuencia visual, golpe extremo y solicitud de baneo.
+- Vanilla-compatible: usa prefabs que ya existen en Valheim y clientes sin el módulo visual.
+- Enhanced: criatura clonada con Jötunn, materiales del vacío, emisión, luces y partículas.
+- AsgardMasterUI: panel F8 inicial para administradores.
+
+SEGURIDAD
+- Observe es el modo predeterminado.
+- Auto-baneo exige Platform ID exacto de forma predeterminada.
+- Daño colateral a estructuras desactivado.
+- Cada castigo queda registrado en Host Manager.
+
+ESTADO FOUNDATION
+- El panel/bridge Python es funcional y validado sintácticamente.
+- Los proyectos C# requieren los ensamblados reales de la instalación de Valheim para compilar y probar.
+- La atribución exacta del atacante en todos los hooks y el RPC completo del panel maestro necesitan calibración con logs reales.
+
+
+R6 Crimson Void: Core sin System.Web.Extensions y panel F8 rojo/negro completamente rediseñado.
+
+R8 Single Instance Fix: panel externo rojo/negro, textos visibles, health vivo, lista de jugadores automática y {player_list} para Discord.
+
+R9 Process Reconciliation Fix: detección real de procesos, recuperación de PID, limpieza de telemetría y cierre de duplicados.
+
+R10 Performance Fix: caché de procesos, reconciliación compartida y GUI asíncrona sin bloqueos.

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\MyProjects\Asgard\asgard_service.py", line 26, in main
+    import host_service
+  File "D:\MyProjects\Asgard\host_service.py", line 30, in <module>
+    from remote_manager import RemoteManager
+  File "D:\MyProjects\Asgard\remote_manager.py", line 18, in <module>
+    import paramiko
+ModuleNotFoundError: No module named 'paramiko'

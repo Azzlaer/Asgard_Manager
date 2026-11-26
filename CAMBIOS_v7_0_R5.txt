@@ -1,0 +1,11 @@
+ASGARD SERVER SUITE v7.0 R5 - BEPINEX VERSION & INSTALLER FIX
+
+- Corrige todas las versiones BepInPlugin a 7.0.5.
+- Evita el aviso: Skipping type because its version is invalid.
+- Agrega instalador automatico para servidor.
+- Agrega instalador automatico para cliente administrador.
+- Separa AdminClient del Avatar Enhanced para que el panel F8 no requiera Jotunn.
+- Crea backup de DLL anteriores antes de instalar.
+- Valida que todas las versiones BepInEx sean numericas.
+- Audit y Punisher solo cargan en valheim_server.exe.
+- Master UI solo carga en valheim.exe.

@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><Import Project="..\UserPaths.props" Condition="Exists('..\UserPaths.props')" /><PropertyGroup><AssemblyName>AsgardAudit</AssemblyName><RootNamespace>Asgard.Audit</RootNamespace></PropertyGroup><ItemGroup><ProjectReference Include="..\AsgardCore\AsgardCore.csproj" /></ItemGroup></Project>

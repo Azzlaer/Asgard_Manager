@@ -1,0 +1,8 @@
+ASGARD SERVER SUITE v7.0 VOID FOUNDATION R3 - UNITY MODULES FIX
+
+- Corrige AsgardMasterUI: agrega referencias a UnityEngine.InputLegacyModule.dll.
+- Corrige AsgardMasterUI: agrega referencias a UnityEngine.TextRenderingModule.dll.
+- El autodetector verifica ambos modulos antes de compilar.
+- El validador confirma que las referencias esten presentes.
+- El mensaje de error de BUILD_ALL ahora distingue errores C# de problemas de rutas.
+- Version del plugin AsgardMasterUI actualizada a foundation-r3.
