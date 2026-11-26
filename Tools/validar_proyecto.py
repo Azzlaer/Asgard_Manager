@@ -138,15 +138,15 @@ def validate_required_files() -> None:
         "ValheimSuite/Tools/instalar_mods_asgard.ps1",
         "CREAR_EXE_PORTABLE.bat",
         "CREAR_TODO.bat",
-        "requirements.txt",
-        "requirements-build.txt",
+        "requirements/requirements.txt",
+        "requirements/requirements-build.txt",
         "asgard_panel.py",
         "asgard_service.py",
         "asgard_remote_agent.py",
         "asgard_suite_bridge.py",
         "LIMPIAR_DUPLICADOS_Y_ARRANCAR.bat",
-        "CAMBIOS_v7_0_R9.txt",
-        "CAMBIOS_v7_0_R10.txt",
+        "docs/legacy/CAMBIOS_v7_0_R9.txt",
+        "docs/legacy/CAMBIOS_v7_0_R10.txt",
     ]
     missing = [item for item in required if not (ROOT / item).is_file()]
     if missing:

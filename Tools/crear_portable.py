@@ -79,29 +79,15 @@ def build_portable(root: Path, binaries: Path, release: Path) -> None:
         "ABRIR_BIBLIOTECA.bat",
         "MIGRAR_DATOS_PORTABLES.bat",
         "MIGRAR_DATOS_PORTABLES.ps1",
-        "LEEME_PORTABLE.txt",
         "README.md",
-        "CAMBIOS_v6_2.txt",
-        "ACTUALIZAR_DESDE_5_3.txt",
         "ROADMAP_CONTROL_REMOTO.md",
-        "CAMBIOS_v7_0.txt",
-        "CAMBIOS_v7_0_R1.txt",
-        "CAMBIOS_v7_0_R2.txt",
-        "CAMBIOS_v7_0_R3.txt",
-        "CAMBIOS_v7_0_R4.txt",
-        "CAMBIOS_v7_0_R5.txt",
-        "CAMBIOS_v7_0_R6.txt",
-        "CAMBIOS_v7_0_R7.txt",
-        "CAMBIOS_v7_0_R8.txt",
-        "CAMBIOS_v7_0_R9.txt",
-        "CAMBIOS_v7_0_R10.txt",
-        "CAMBIOS_v7_0_R10_LOGO.txt",
-        "CAMBIOS_v7_0_R10_1.txt",
         "DIAGNOSTICAR_SERVIDORES_DUPLICADOS.bat",
         "DIAGNOSTICAR_SERVIDORES_DUPLICADOS.ps1",
         "LIMPIAR_DUPLICADOS_Y_ARRANCAR.bat",
         "ROADMAP_V7_COMPLETO.md",
     )
+    copy_directory(root / "docs" / "legacy", release / "docs" / "legacy")
+
     for name in root_files:
         copy_file(root / name, release / name, required=False)
 

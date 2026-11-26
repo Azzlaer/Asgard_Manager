@@ -22,7 +22,7 @@ if errorlevel 1 goto :error
 set "VPY=%CD%\_build_venv\Scripts\python.exe"
 "%VPY%" -m pip install --upgrade pip
 if errorlevel 1 goto :error
-"%VPY%" -m pip install -r requirements-build.txt
+"%VPY%" -m pip install -r "requirements\requirements-build.txt"
 if errorlevel 1 goto :error
 
 set "BUILDROOT=%CD%\_exe_build"
