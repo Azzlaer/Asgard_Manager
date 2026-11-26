@@ -5,6 +5,7 @@ import atexit
 import json
 import hmac
 import logging
+from logging.handlers import RotatingFileHandler
 import os
 import platform
 import shutil
@@ -22,6 +23,7 @@ from urllib.parse import parse_qs, urlparse
 import psutil
 
 from process_manager import ProcessManager
+from backup_manager import BackupManager
 from resource_control import automatic_policy, host_capacity, normalize_policy
 
 
@@ -66,7 +68,7 @@ BACKUP_ROOT = DATA_DIR / "backups"
 BACKUP_ROOT.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
-    filename=DATA_DIR / "agent.log",
+    handlers=[RotatingFileHandler(DATA_DIR / "agent.log", maxBytes=5 * 1024 * 1024, backupCount=4, encoding="utf-8")],
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
 )
@@ -101,6 +103,7 @@ def add_event(server_id: int | None, level: str, message: str) -> None:
 
 
 process_manager = ProcessManager(add_event)
+backup_manager = BackupManager(add_event, backup_root=BACKUP_ROOT)
 
 
 def persist_runtime() -> None:
@@ -266,25 +269,9 @@ def stop_server(server_id: int, force: bool = True) -> dict:
 
 def backup_server(server_id: int, reason: str = "manual") -> dict:
     server = get_server(server_id)
-    source = Path(server.get("savedir", ""))
-    if not source.is_dir():
-        raise FileNotFoundError(f"No existe savedir: {source}")
-    destination = Path(server.get("backup_directory") or BACKUP_ROOT / str(server_id))
-    destination.mkdir(parents=True, exist_ok=True)
-    safe_name = "".join(c if c.isalnum() or c in "-_ " else "_" for c in server["name"]).strip()
-    archive = destination / f"{safe_name}_{time.strftime('%Y-%m-%d_%H-%M-%S')}_{reason}.zip"
-    with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
-        for path in source.rglob("*"):
-            if path.is_file():
-                zf.write(path, path.relative_to(source))
-    retention = max(1, int(server.get("backup_retention", 10)))
-    backups = sorted(destination.glob("*.zip"), key=lambda p: p.stat().st_mtime, reverse=True)
-    for old in backups[retention:]:
-        try:
-            old.unlink()
-        except OSError:
-            pass
-    return {"path": str(archive), "size_bytes": archive.stat().st_size, "reason": reason}
+    server["backup_directory"] = server.get("backup_directory") or str(BACKUP_ROOT / str(server_id))
+    server.setdefault("backup_retention", 10)
+    return backup_manager.create_backup(server, reason)
 
 
 def restart_server(server_id: int, backup: bool = True) -> dict:
@@ -555,8 +542,7 @@ def auto_start() -> None:
 
 
 def run() -> None:
-    threading.Thread(target=auto_start, daemon=True).start()
-    httpd = ThreadingHTTPServer((str(CONFIG["bind"]), int(CONFIG["port"])), Handler)
+    httpd = ThreadingHTTPServer(("127.0.0.1", int(CONFIG["port"])), Handler)
     add_event(None, "INFO", f"ASGARD Remote Agent {VERSION} en {CONFIG['bind']}:{CONFIG['port']}")
     httpd.serve_forever(poll_interval=0.5)
 
