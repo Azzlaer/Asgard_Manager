@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import atexit
 import json
+import hmac
 import logging
 import os
 import platform
@@ -430,7 +431,7 @@ class Handler(BaseHTTPRequestHandler):
     server_version = "ASGARDRemoteAgent/6.1"
 
     def _auth(self) -> bool:
-        return self.headers.get("X-ASGARD-Token", "") == CONFIG["token"]
+        return hmac.compare_digest(self.headers.get("X-ASGARD-Token", "").encode("utf-8"), str(CONFIG["token"]).encode("utf-8"))
 
     def _json(self, status: int, payload) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -442,6 +443,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def _read_json(self) -> dict:
         length = int(self.headers.get("Content-Length", "0"))
+        if not 0 <= length <= 8 * 1024 * 1024:
+            raise ValueError("Tamaño de solicitud inválido")
         return json.loads(self.rfile.read(length).decode("utf-8")) if length else {}
 
     def log_message(self, fmt, *args):

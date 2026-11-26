@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import http.client
 import json
 import ntpath
 import os
@@ -16,7 +17,6 @@ from pathlib import Path, PureWindowsPath
 from typing import Callable, Iterable
 
 import paramiko
-import requests
 
 from common import APP_DIR, APP_DATA_DIR, MOD_LIBRARY_ROOT, CONFIG_LIBRARY_ROOT, REMOTE_DOWNLOADS_DIR
 from credential_vault import decrypt_text, encrypt_text
@@ -236,7 +236,11 @@ class RemoteManager:
     # ---------- SSH / agent ----------
     def _connect(self, host: dict) -> paramiko.SSHClient:
         client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.load_system_host_keys()
+        known_hosts = APP_DATA_DIR / "known_hosts"
+        if known_hosts.is_file():
+            client.load_host_keys(str(known_hosts))
+        client.set_missing_host_key_policy(paramiko.RejectPolicy())
         kwargs = {
             "hostname": host["address"],
             "port": int(host["ssh_port"]),
@@ -256,7 +260,11 @@ class RemoteManager:
                 kwargs["passphrase"] = host["password"]
         else:
             kwargs["password"] = host.get("password", "")
-        client.connect(**kwargs)
+        try:
+            client.connect(**kwargs)
+        except Exception:
+            client.close()
+            raise
         return client
 
     def install_ssh_key(self, host_id: int) -> dict:
@@ -343,31 +351,36 @@ if($isAdmin){{icacls $auth /inheritance:r /grant '*S-1-5-32-544:F' /grant '*S-1-
         data["latency_ms"] = round((time.monotonic() - started) * 1000)
         return data
 
-    def _agent_base_url(self, host: dict) -> str:
-        address = host.get("tailscale_ip") or host["address"]
-        if ":" in address and not address.startswith("["):
-            address = f"[{address}]"
-        return f"http://{address}:{int(host['agent_port'])}"
-
     def agent_request(self, host_id: int, method: str, path: str, payload=None, timeout: int = 30):
         host = self.get_host(host_id)
         token = host.get("api_token", "")
         if not token:
             raise RemoteError("El host no tiene token de agente")
-        response = requests.request(
-            method,
-            self._agent_base_url(host) + path,
-            headers={"X-ASGARD-Token": token},
-            json=payload,
-            timeout=timeout,
-        )
+        if not path.startswith("/") or path.startswith("//"):
+            raise RemoteError("Ruta API inválida")
+        client = self._connect(host)
+        connection = http.client.HTTPConnection("127.0.0.1", int(host["agent_port"]), timeout=timeout)
+        channel = None
         try:
-            data = response.json()
-        except ValueError:
-            data = {"error": response.text[:500]}
-        if response.status_code >= 400:
-            raise RemoteError(data.get("error", f"HTTP {response.status_code}"))
-        return data
+            transport = client.get_transport()
+            channel = transport.open_channel("direct-tcpip", ("127.0.0.1", int(host["agent_port"])), ("127.0.0.1", 0), timeout=timeout)
+            channel.settimeout(timeout)
+            connection.sock = channel
+            body = json.dumps(payload).encode("utf-8") if payload is not None else None
+            connection.request(method, path, body=body, headers={"X-ASGARD-Token": token, "Content-Type": "application/json", "Connection": "close"})
+            response = connection.getresponse()
+            raw = response.read(16 * 1024 * 1024 + 1)
+            if len(raw) > 16 * 1024 * 1024:
+                raise RemoteError("Respuesta del agente demasiado grande")
+            data = json.loads(raw)
+            if not 200 <= response.status < 300:
+                raise RemoteError(data.get("error", f"HTTP {response.status}") if isinstance(data, dict) else f"HTTP {response.status}")
+            return data
+        finally:
+            connection.close()
+            if channel is not None:
+                channel.close()
+            client.close()
 
     def test_agent(self, host_id: int) -> dict:
         return self.agent_request(host_id, "GET", "/health", timeout=8)
@@ -442,7 +455,7 @@ if($isAdmin){{icacls $auth /inheritance:r /grant '*S-1-5-32-544:F' /grant '*S-1-
         remote_exe = ntpath.join(agent_dir, "ASGARD_Remote_Agent.exe")
         remote_config = ntpath.join(agent_dir, "agent_config.json")
         config = {
-            "bind": "0.0.0.0",
+            "bind": "127.0.0.1",
             "port": int(host["agent_port"]),
             "token": host["api_token"],
             "data_directory": ntpath.join(agent_dir, "AgentData"),
@@ -463,10 +476,7 @@ $ErrorActionPreference='Stop'
 $exe={_ps_literal(remote_exe)}
 $dir={_ps_literal(agent_dir)}
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
-$rule=Get-NetFirewallRule -DisplayName 'ASGARD Remote Agent LAN' -ErrorAction SilentlyContinue
-if(-not $rule){{New-NetFirewallRule -DisplayName 'ASGARD Remote Agent LAN' -Direction Inbound -Action Allow -Protocol TCP -LocalPort {int(host['agent_port'])} -Profile Private | Out-Null}}
-$tsRule=Get-NetFirewallRule -DisplayName 'ASGARD Remote Agent Tailscale' -ErrorAction SilentlyContinue
-if(-not $tsRule){{New-NetFirewallRule -DisplayName 'ASGARD Remote Agent Tailscale' -Direction Inbound -Action Allow -Protocol TCP -LocalPort {int(host['agent_port'])} -RemoteAddress '100.64.0.0/10','fd7a:115c:a1e0::/48' | Out-Null}}
+Get-NetFirewallRule -DisplayName 'ASGARD Remote Agent LAN','ASGARD Remote Agent Tailscale' -ErrorAction SilentlyContinue | Disable-NetFirewallRule
 $action=New-ScheduledTaskAction -Execute $exe -WorkingDirectory $dir
 $trigger=New-ScheduledTaskTrigger -AtStartup
 $principal=New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount -RunLevel Highest
