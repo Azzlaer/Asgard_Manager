@@ -1005,10 +1005,11 @@ class Handler(BaseHTTPRequestHandler):
                 if action == "players-rebuild":
                     return self._json(200, discord_manager.rebuild_player_registry(sid))
                 if action == "restore":
-                    if process_manager.is_alive(sid):
-                        raise RuntimeError("Detén el servidor antes de restaurar")
-                    server = get_server(sid)
-                    backup_manager.restore_backup(server, data["path"])
+                    with operation_lock:
+                        server = get_server(sid)
+                        if process_manager.scan_server(server, force_refresh=True) or process_manager.is_alive(sid):
+                            raise RuntimeError("Detén todas las instancias antes de restaurar")
+                        backup_manager.restore_backup(server, data["path"])
                     return self._json(200, {"ok": True})
 
             return self._json(404, {"error": "Ruta no encontrada"})

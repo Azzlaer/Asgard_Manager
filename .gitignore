@@ -30,3 +30,8 @@ UserPaths.props
 .env
 .env.*
 !.env.example
+
+# Remote agent runtime
+/agent_config.json
+/AgentData/
+*.partial
