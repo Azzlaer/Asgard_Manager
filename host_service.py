@@ -4,6 +4,7 @@ import json
 import os
 import atexit
 import logging
+from logging.handlers import RotatingFileHandler
 import threading
 import time
 from pathlib import Path
@@ -11,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 from backup_manager import BackupManager
+from local_auth import authorized as local_authorized, is_bridge_ingest, load_token
 from common import SERVICE_HOST, SERVICE_LOG_DIR, SERVICE_PORT, SERVICE_PID_PATH, SERVICE_LOCK_PATH
 from database import connect, initialize, row_to_dict
 from log_reader import tail_file
@@ -109,7 +111,7 @@ _write_service_pid()
 atexit.register(_remove_service_pid)
 atexit.register(_release_single_instance_lock)
 logging.basicConfig(
-    filename=SERVICE_LOG_DIR / "host_service.log",
+    handlers=[RotatingFileHandler(SERVICE_LOG_DIR / "host_service.log", maxBytes=5 * 1024 * 1024, backupCount=4, encoding="utf-8")],
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
 )
@@ -634,15 +636,33 @@ class Handler(BaseHTTPRequestHandler):
 
     def _read_json(self) -> dict:
         length = int(self.headers.get("Content-Length", "0"))
-        if length <= 0:
+        if not 0 <= length <= 8 * 1024 * 1024:
+            raise ValueError("Tamaño de solicitud inválido")
+        if not length:
             return {}
-        return json.loads(self.rfile.read(length).decode("utf-8"))
+        data = json.loads(self.rfile.read(length).decode("utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError("Se requiere un objeto JSON")
+        return data
+
+    def _guard(self) -> bool:
+        path = urlparse(self.path).path
+        if is_bridge_ingest(self.command, path):
+            parts = path.split("/")
+            if asgard_suite_bridge.authorized(int(parts[2]), self.headers.get("X-Asgard-Token", "")):
+                return True
+        elif local_authorized(self.headers.get("X-ASGARD-Local-Token", "")):
+            return True
+        self._json(401, {"error": "Autenticación ASGARD requerida"})
+        return False
 
     def log_message(self, format, *args):
         logging.info(format, *args)
 
     def do_GET(self):
         try:
+            if not self._guard():
+                return
             parsed = urlparse(self.path)
             path = parsed.path
             query = parse_qs(parsed.query)
@@ -815,6 +835,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
+            if not self._guard():
+                return
             path = urlparse(self.path).path
             data = self._read_json()
             if path.startswith("/asgard-suite/"):
@@ -1018,6 +1040,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         try:
+            if not self._guard():
+                return
             path = urlparse(self.path).path
             data = self._read_json()
             parts = path.strip("/").split("/")
@@ -1089,6 +1113,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         try:
+            if not self._guard():
+                return
             parsed = urlparse(self.path)
             path = parsed.path
             query = parse_qs(parsed.query)
@@ -1226,6 +1252,7 @@ def auto_start() -> None:
 
 def run_service() -> None:
     # Reserva primero el puerto; una segunda instancia no alcanza a ejecutar auto_start.
+    load_token()
     server = ThreadingHTTPServer((SERVICE_HOST, SERVICE_PORT), Handler)
     threading.Thread(target=auto_start, daemon=True).start()
     logging.info(

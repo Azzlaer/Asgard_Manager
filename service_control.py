@@ -10,6 +10,7 @@ from urllib.request import Request, urlopen
 import psutil
 
 from common import APP_DIR, SERVICE_PID_PATH, SERVICE_URL
+from local_auth import local_headers
 
 
 CREATE_NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000)
@@ -53,7 +54,7 @@ def _pid_is_asgard_service(pid: int) -> bool:
 
 def _health() -> bool:
     try:
-        with urlopen(f"{SERVICE_URL}/health", timeout=1.5) as response:
+        with urlopen(Request(f"{SERVICE_URL}/health", headers=local_headers()), timeout=1.5) as response:
             return response.status == 200
     except Exception:
         return False
@@ -140,7 +141,7 @@ def _request_shutdown() -> bool:
             f"{SERVICE_URL}/shutdown",
             data=b"{}",
             method="POST",
-            headers={"Content-Type": "application/json"},
+            headers={"Content-Type": "application/json", **local_headers()},
         )
         with urlopen(request, timeout=3) as response:
             return response.status == 200

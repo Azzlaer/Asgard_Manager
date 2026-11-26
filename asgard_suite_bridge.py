@@ -29,8 +29,11 @@ def save_settings(server_id: int, data: dict) -> dict:
 
 
 def authorized(server_id: int, token: str) -> bool:
-    settings = get_settings(server_id)
-    return bool(settings["enabled"]) and secrets.compare_digest(str(settings["api_token"]), str(token or ""))
+    if not token:
+        return False
+    with connect() as conn:
+        settings = conn.execute("SELECT enabled, api_token FROM mod_bridge_settings WHERE server_id=?", (server_id,)).fetchone()
+    return bool(settings and settings["enabled"] and settings["api_token"]) and secrets.compare_digest(str(settings["api_token"]).encode("utf-8"), str(token).encode("utf-8"))
 
 
 def ingest_audit(server_id: int, data: dict) -> dict:

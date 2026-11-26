@@ -10,6 +10,7 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 import requests
+from local_auth import local_headers
 
 from common import (
     SERVICE_URL, APP_DIR, APP_DATA_DIR, LIBRARY_ROOT,
@@ -27,6 +28,8 @@ class Api:
         response = requests.request(
             method,
             SERVICE_URL + path,
+            headers=local_headers(),
+            allow_redirects=False,
             json=payload,
             timeout=timeout,
         )

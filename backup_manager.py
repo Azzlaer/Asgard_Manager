@@ -45,17 +45,18 @@ def extract_verified(archive: Path, target: Path) -> None:
 
 
 class BackupManager:
-    def __init__(self, event_callback: Callable[[int, str, str], None]):
+    def __init__(self, event_callback: Callable[[int, str, str], None], backup_root: Path = BACKUP_ROOT):
         self._event_callback = event_callback
         self._lock = threading.RLock()
-        BACKUP_ROOT.mkdir(parents=True, exist_ok=True)
+        self.backup_root = Path(backup_root)
+        self.backup_root.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
     def _safe_name(value: str) -> str:
         return "".join(c if c.isalnum() or c in "-_ " else "_" for c in value).strip() or "server"
 
     def _destination(self, server: dict) -> Path:
-        return Path(server.get("backup_directory") or BACKUP_ROOT / self._safe_name(server["name"])).resolve()
+        return Path(server.get("backup_directory") or self.backup_root / self._safe_name(server["name"])).resolve()
 
     def create_backup(self, server: dict, reason: str, *, retain: bool = True) -> dict:
         with self._lock:
@@ -75,12 +76,12 @@ class BackupManager:
             try:
                 with zipfile.ZipFile(partial, "x", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
                     for path in source.rglob("*"):
-                        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+                        if path.is_symlink() or (getattr(path.lstat(), "st_file_attributes", 0) & 0x400):
                             raise ValueError("Enlace no permitido en savedir")
                         if path.is_file():
                             zf.write(path, path.relative_to(source))
                 with zipfile.ZipFile(partial) as zf:
-                    if zf.testzip() is not None:
+                    if not zf.namelist() or zf.testzip() is not None:
                         raise ValueError("Backup corrupto")
                 os.replace(partial, archive)
             finally:
