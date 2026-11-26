@@ -72,3 +72,8 @@ R10 conserva la reconciliación segura de procesos de R9, pero elimina el costo 
 ## Logo personalizado del panel
 
 El encabezado y el icono de la ventana cargan `Assets/void_avatar_user.png`, creado directamente a partir de la imagen entregada por el usuario. Este cambio afecta solo al panel externo.
+
+## Documentación histórica y dependencias
+
+- Historial y manuales: `docs/legacy/`.
+- Dependencias Python: `requirements/requirements.txt` y `requirements/requirements-build.txt`.
