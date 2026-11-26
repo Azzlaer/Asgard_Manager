@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+_build_venv/
+_exe_build/
+build/
+[Dd]ist/
+# .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+UserPaths.props
+# Portable runtime data (retain documentation)
+/Data/*
+!/Data/README.txt
+/Library/*
+!/Library/README.txt
+/RemoteDownloads/*
+!/RemoteDownloads/README.txt
+/RemoteAgentPackage/*
+!/RemoteAgentPackage/README.txt
+*.log
+.env
+.env.*
+!.env.example
